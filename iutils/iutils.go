@@ -4,12 +4,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
 var NonDigitalRE = regexp.MustCompile(`[^0-9,\.]+`)
+
+var rnd_letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func RandString(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = rnd_letters[rand.Intn(len(rnd_letters))]
+	}
+	return string(b)
+}
 
 func AnyToStringArray(s interface{}) []string {
 	out := make([]string, 0)
@@ -197,4 +208,26 @@ func inGetPath(data interface{}, paths []string) interface{} {
 
 	}
 	return nil
+}
+
+func GetKey(key string, p interface{}) interface{} {
+
+	switch p.(type) {
+	case map[string]interface{}:
+		s := p.(map[string]interface{})
+		return s[key]
+	}
+	return nil
+}
+
+func StringArrayToInterface(list []string) []interface{} {
+	out := make([]interface{}, len(list))
+	for i, _ := range list {
+		out[i] = list[i]
+	}
+	return out
+}
+
+func GetKeyKey(key1 string, key2 string, p interface{}) interface{} {
+	return GetKey(key2, GetKey(key1, p))
 }
