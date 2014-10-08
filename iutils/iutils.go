@@ -35,6 +35,13 @@ func AnyToStringArray(s interface{}) []string {
 			out = append(out, AnyToString(v))
 		}
 		return out
+	case []int:
+		for _, v := range s.([]int) {
+			out = append(out, AnyToString(v))
+		}
+		return out
+	case nil:
+		return out
 	default:
 		log.Printf("AnyToStringArray. unknown type %s\n", v)
 		out = append(out, AnyToString(s))
@@ -73,6 +80,34 @@ func AnyToString(s interface{}) string {
 		log.Fatalf("AnyToString. unknown type '%t' => '%s'\v", s, v)
 	}
 	return ""
+}
+
+func AnyToIntArray(s interface{}) []int {
+	out := []int{}
+	switch v := s.(type) {
+	case int:
+		out = append(out, s.(int))
+		return out
+	case []int:
+		return s.([]int)
+	case []interface{}:
+		for _, v := range s.([]interface{}) {
+			out = append(out, AnyToInt(v))
+		}
+		return out
+	case []string:
+		for _, v := range s.([]string) {
+			out = append(out, AnyToInt(v))
+		}
+		return out
+	case nil:
+		return out
+	default:
+		log.Printf("AnyToIntArray. unknown type %s\n", v)
+		out = append(out, AnyToInt(s))
+		return out
+	}
+	return out
 }
 
 func AnyToBoolInt(s interface{}) int {
