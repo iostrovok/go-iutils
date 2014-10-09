@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -20,6 +21,25 @@ func RandString(n int) string {
 		b[i] = rnd_letters[rand.Intn(len(rnd_letters))]
 	}
 	return string(b)
+}
+
+func AppendAny(d ...interface{}) []interface{} {
+
+	out := reflect.ValueOf([]interface{}{})
+
+	for _, d1 := range d {
+		val := reflect.ValueOf(d1)
+		switch val.Kind() {
+		case reflect.Slice, reflect.Array:
+			for _, u := range val.Interface().([]interface{}) {
+				out = reflect.Append(out, reflect.ValueOf(u))
+			}
+		default:
+			out = reflect.Append(out, val)
+		}
+	}
+
+	return out.Interface().([]interface{})
 }
 
 func AnyToStringArray(s interface{}) []string {
