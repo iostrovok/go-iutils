@@ -2,6 +2,7 @@ package iutils
 
 import (
 	"log"
+	"strings"
 	"testing"
 )
 
@@ -41,5 +42,34 @@ func Test_PreInit(t *testing.T) {
 	if res_a[0] != "123" || res_a[1] != 123 || res_a[2] != 1 || res_a[3] != "TOP" || res_a[4] != "MAIL" {
 		t.Fatal("error AppendAny")
 	}
+
+	res_str := strings.Split("A,A,B,C,D,E", ",")
+	res_str_res := GrepString(res_str, "A")
+	log.Printf("GrepString: %v\n", res_str_res)
+	if len(res_str_res) != 2 {
+		t.Fatal("error GrepString([]string, string)")
+	}
+
+	var ff = func(a string) bool {
+		if a != "A" {
+			return true
+		}
+		return false
+	}
+
+	res_str_res = GrepString(res_str, ff)
+	log.Printf("GrepString: %v\n", res_str_res)
+	if len(res_str_res) != 4 {
+		t.Fatal("error GrepString([]string, func)")
+	}
+
+	res_str = append(res_str, "", "")
+	res_str_res = GrepString(res_str)
+	log.Printf("GrepString: %v\n", res_str_res)
+	if len(res_str_res) != 6 {
+		t.Fatal("error GrepString([]string)")
+	}
+
+	//t.Fatal("error AppendAny")
 
 }

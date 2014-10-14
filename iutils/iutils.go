@@ -286,3 +286,38 @@ func StringArrayToInterface(list []string) []interface{} {
 func GetKeyKey(key1 string, key2 string, p interface{}) interface{} {
 	return GetKey(key2, GetKey(key1, p))
 }
+
+func GrepString(list []string, pattern ...interface{}) []string {
+	out := []string{}
+
+	if len(pattern) > 0 {
+		pat := reflect.ValueOf(pattern[0])
+		switch pat.Kind() {
+		case reflect.String:
+			p := pat.Interface().(string)
+			for _, v := range list {
+				if strings.Contains(v, p) {
+					out = append(out, v)
+				}
+			}
+		case reflect.Func:
+			p := pattern[0].(func(string) bool)
+			for _, v := range list {
+				if p(v) {
+					out = append(out, v)
+				}
+			}
+		default:
+			log.Fatalf("Second param must be string or <func(string) bool>.. Or misses\n")
+		}
+	} else {
+		/*   no patten */
+		for _, v := range list {
+			if v != "" {
+				out = append(out, v)
+			}
+		}
+	}
+
+	return out
+}
