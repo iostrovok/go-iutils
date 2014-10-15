@@ -44,7 +44,7 @@ func AppendAny(d ...interface{}) []interface{} {
 
 func AnyToStringArray(s interface{}) []string {
 	out := make([]string, 0)
-	switch v := s.(type) {
+	switch s.(type) {
 	case string:
 		out = append(out, s.(string))
 		return out
@@ -63,7 +63,6 @@ func AnyToStringArray(s interface{}) []string {
 	case nil:
 		return out
 	default:
-		log.Printf("AnyToStringArray. unknown type %s\n", v)
 		out = append(out, AnyToString(s))
 		return out
 	}
@@ -80,16 +79,11 @@ func AnyToString(s interface{}) string {
 		raw := s.([]uint8)
 		return string(raw)
 	case float64:
-		//return strconv.FormatFloat(s.(float64), 'f', 6, 64)
 		return fmt.Sprintf("%f", s.(float64))
 	case int:
 		return strconv.Itoa(s.(int))
-		//	case int32:
-		//		return strconv.Itoa(s.(int32))
 	case int64:
 		return strconv.FormatUint(uint64(s.(int64)), 10)
-		//	case *int32:
-		//		return strconv.Itoa(*s.(*int32))
 	case *int64:
 		return strconv.FormatUint(uint64(*s.(*int64)), 10)
 	case *int:
@@ -104,7 +98,7 @@ func AnyToString(s interface{}) string {
 
 func AnyToIntArray(s interface{}) []int {
 	out := []int{}
-	switch v := s.(type) {
+	switch s.(type) {
 	case int:
 		out = append(out, s.(int))
 		return out
@@ -123,7 +117,6 @@ func AnyToIntArray(s interface{}) []int {
 	case nil:
 		return out
 	default:
-		log.Printf("AnyToIntArray. unknown type %s\n", v)
 		out = append(out, AnyToInt(s))
 		return out
 	}
@@ -231,7 +224,7 @@ func inGetPath(data interface{}, paths []string) interface{} {
 
 	path := paths[0]
 	paths = paths[1:]
-	switch t := data.(type) {
+	switch data.(type) {
 	case map[string]interface{}:
 		if path == "*" {
 			out := map[string]interface{}{}
@@ -258,9 +251,7 @@ func inGetPath(data interface{}, paths []string) interface{} {
 			return inGetPath(d[i], paths)
 		}
 	default:
-		log.Printf("check type %s\n", t)
 		return data
-
 	}
 	return nil
 }
