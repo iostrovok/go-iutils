@@ -180,6 +180,19 @@ func AnyToFloat64(s interface{}) float64 {
 	return 0.0
 }
 
+func EqFloat64(a float64, b float64, mants ...int) bool {
+	mant := 5.0
+	if len(mants) == 0 {
+		mant = float64(mants[0])
+	}
+
+	r := mant*a - mant*b
+	if -1 < r && r < 1 {
+		return true
+	}
+	return false
+}
+
 func AnyToInt(s interface{}, minmax ...int) int {
 	i := _AnyToInt(s)
 	if len(minmax) == 0 {

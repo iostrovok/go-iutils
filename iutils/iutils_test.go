@@ -50,19 +50,6 @@ func _o1_float64(t *testing.T) {
 	}
 }
 
-func EqFloat64(a float64, b float64, mants ...int) bool {
-	mant := 5.0
-	if len(mants) == 0 {
-		mant = float64(mants[0])
-	}
-
-	r := mant*a - mant*b
-	if -1 < r && r < 1 {
-		return true
-	}
-	return false
-}
-
 func _02_PreInit(t *testing.T) {
 	str := "123"
 	if 123 != AnyToInt(str) {
