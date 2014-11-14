@@ -131,6 +131,55 @@ func AnyToBoolInt(s interface{}) int {
 	return 1
 }
 
+func AnyToFloat64(s interface{}) float64 {
+	if s == nil {
+		return 0
+	}
+
+	switch s.(type) {
+	case string:
+		st := NonDigitalRE.ReplaceAllString(s.(string), "")
+		if st == "" {
+			return 0.0
+		}
+		i, err := strconv.ParseFloat(st, 64)
+		if err != nil {
+			log.Println(err)
+			return 0.0
+		}
+		return float64(i)
+
+	case []uint8:
+		return AnyToFloat64(string(s.([]uint8)))
+	case int:
+		return float64(s.(int))
+	case int32:
+		return float64(s.(int32))
+	case int64:
+		return float64(s.(int64))
+	case *int32:
+		return float64(*s.(*int32))
+	case *int64:
+		return float64(*s.(*int64))
+	case *int:
+		return float64(*s.(*int))
+	case float32:
+		return float64(s.(float32))
+	case *float32:
+		return float64(*s.(*float32))
+
+	case *float64:
+		return *s.(*float64)
+
+	case float64:
+		return s.(float64)
+
+	default:
+		log.Fatalf("AnyToFloat64. unknown type %T\v", s)
+	}
+	return 0.0
+}
+
 func AnyToInt(s interface{}, minmax ...int) int {
 	i := _AnyToInt(s)
 	if len(minmax) == 0 {

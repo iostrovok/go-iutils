@@ -6,7 +6,64 @@ import (
 	"testing"
 )
 
-func Test_PreInit(t *testing.T) {
+func Test_(t *testing.T) {
+	_o1_float64(t)
+	_02_PreInit(t)
+}
+
+func _o1_float64(t *testing.T) {
+
+	var s0 int
+	s0 = 1234
+
+	var s32 float32
+	s32 = 1234.1256
+
+	var s64 float64
+	s64 = 1234.1256
+
+	if s64 != AnyToFloat64("1234.1256") {
+		t.Fatal("error AnyToFloat64 from str")
+	}
+
+	if 1234.0 != AnyToFloat64(s0) {
+		t.Fatal("error AnyToFloat64 from int")
+	}
+
+	if 1234.0 != AnyToFloat64(&s0) {
+		t.Fatal("error AnyToFloat64 from *int")
+	}
+
+	if !EqFloat64(s64, AnyToFloat64(s32), 5) {
+		log.Println(AnyToFloat64(s32))
+		t.Fatal("error AnyToFloat64 from float32")
+	}
+	if !EqFloat64(s64, AnyToFloat64(&s32), 5) {
+		t.Fatal("error AnyToFloat64 from *float32")
+	}
+
+	if !EqFloat64(s64, AnyToFloat64(s64), 5) {
+		t.Fatal("error AnyToFloat64 from float64")
+	}
+	if !EqFloat64(s64, AnyToFloat64(&s64), 5) {
+		t.Fatal("error AnyToFloat64 from *float64")
+	}
+}
+
+func EqFloat64(a float64, b float64, mants ...int) bool {
+	mant := 5.0
+	if len(mants) == 0 {
+		mant = float64(mants[0])
+	}
+
+	r := mant*a - mant*b
+	if -1 < r && r < 1 {
+		return true
+	}
+	return false
+}
+
+func _02_PreInit(t *testing.T) {
 	str := "123"
 	if 123 != AnyToInt(str) {
 		t.Fatal("error AnyToInt")
