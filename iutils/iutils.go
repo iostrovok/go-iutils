@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var NonDigitalRE = regexp.MustCompile(`[^0-9,\.]+`)
+var NonDigitalRE = regexp.MustCompile(`[^-0-9,\.]+`)
 
 var rnd_letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 

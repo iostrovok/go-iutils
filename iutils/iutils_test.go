@@ -22,8 +22,25 @@ func _o1_float64(t *testing.T) {
 	var s64 float64
 	s64 = 1234.1256
 
+	var ms0 int
+	ms0 = -1234
+
+	var ms32 float32
+	ms32 = -1234.1256
+
+	var ms64 float64
+	ms64 = -1234.1256
+
+	if ms64 != AnyToFloat64("-1234.1256") {
+		t.Fatal("error AnyToFloat64 from str with minus")
+	}
+
 	if s64 != AnyToFloat64("1234.1256") {
 		t.Fatal("error AnyToFloat64 from str")
+	}
+
+	if -1234.0 != AnyToFloat64(ms0) {
+		t.Fatal("error AnyToFloat64 from int with minus")
 	}
 
 	if 1234.0 != AnyToFloat64(s0) {
@@ -38,16 +55,25 @@ func _o1_float64(t *testing.T) {
 		log.Println(AnyToFloat64(s32))
 		t.Fatal("error AnyToFloat64 from float32")
 	}
+	if !EqFloat64(ms64, AnyToFloat64(ms32), 5) {
+		log.Println(AnyToFloat64(s32))
+		t.Fatal("error AnyToFloat64 from float32 with minus")
+	}
 	if !EqFloat64(s64, AnyToFloat64(&s32), 5) {
 		t.Fatal("error AnyToFloat64 from *float32")
 	}
 
+	if !EqFloat64(ms64, AnyToFloat64(ms64), 5) {
+		t.Fatal("error AnyToFloat64 from float64 with minus")
+	}
 	if !EqFloat64(s64, AnyToFloat64(s64), 5) {
 		t.Fatal("error AnyToFloat64 from float64")
 	}
 	if !EqFloat64(s64, AnyToFloat64(&s64), 5) {
 		t.Fatal("error AnyToFloat64 from *float64")
 	}
+
+	//t.Fatal("error AppendAny")
 }
 
 func _02_PreInit(t *testing.T) {
